@@ -1,7 +1,28 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { RiArrowLeftWideFill, RiArrowRightWideFill } from "react-icons/ri";
+import api from "../common/api";
 import CourseItem from "../components/CourseItem";
 import LabelOfPage from "../components/LabelOfPage";
 function DiscoverPage() {
+  const [listCourse, setListCourse] = useState([]);
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const courses = await axios({
+          method: api.getCourses.method,
+          url: api.getCourses.url,
+        });
+        const filterCourse = courses.data?.courses.filter(
+          (item) => item.isComing === false
+        );
+        setListCourse(filterCourse);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchCourse();
+  }, []);
   return (
     <div className="pt-24 px-10 w-full bg-[#f6f6f8]">
       <LabelOfPage>Khám phá</LabelOfPage>
@@ -23,10 +44,10 @@ function DiscoverPage() {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-8">
-        <CourseItem></CourseItem>
-        <CourseItem></CourseItem>
-        <CourseItem></CourseItem>
-        <CourseItem></CourseItem>
+        {listCourse.length > 0 &&
+          listCourse.map((course, index) => {
+            return <CourseItem key={index} data={course}></CourseItem>;
+          })}
       </div>
     </div>
   );

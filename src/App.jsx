@@ -1,4 +1,5 @@
 import { Outlet, useLocation } from "react-router";
+import { ToastContainer } from "react-toastify";
 import Header from "./components/Header";
 import SideBar from "./components/SideBar";
 
@@ -15,6 +16,7 @@ function App() {
         {!hideHeaderAndSidebar && <SideBar></SideBar>}
         <Outlet></Outlet>
       </div>
+      <ToastContainer></ToastContainer>
     </>
   );
 }
