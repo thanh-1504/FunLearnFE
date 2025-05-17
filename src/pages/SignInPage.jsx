@@ -2,11 +2,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { FaArrowRight } from "react-icons/fa";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import api from "../common/api";
+
 const schema = yup.object({
   email: yup.string().email().required("Email is required"),
   password: yup
@@ -19,14 +21,17 @@ function SignInPage() {
     register,
     handleSubmit,
     reset,
+    isSubmitting,
     formState: { errors, isValid },
   } = useForm({ resolver: yupResolver(schema) });
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmitFormSignIn = async (value) => {
     if (isValid) {
       try {
+        setLoading(true);
         const response = await axios({
           method: api.signIn.method,
           url: api.signIn.url,
@@ -35,12 +40,12 @@ function SignInPage() {
             password: value?.password,
           },
         });
-        console.log(response);
         if (response.data.status === "success") {
           toast.success("Đăng nhập thành công", {
             pauseOnHover: false,
             autoClose: 1300,
           });
+          setLoading(false);
           localStorage.setItem(
             "user",
             JSON.stringify({
@@ -58,6 +63,7 @@ function SignInPage() {
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
         toast.error("Tài khoản hoặc mật khẩu không đúng !", {
           pauseOnHover: false,
           autoClose: 1500,
@@ -136,13 +142,17 @@ function SignInPage() {
             )}
           </div>
           <button
+            disabled={isSubmitting}
             className={`text-white font-semibold uppercase flex items-center justify-center p-2 min-h-10 bg-[#fa8232] hover:cursor-pointer`}
           >
-            SIGN IN
-            {/* {loading ? <div className="w-5 h-5 rounded-full border-2 animate-spin border-b-transparent pointer-events-none"></div> : <div className="flex items-center gap-x-1">
-            
-              <FaArrowRight />
-            </div>} */}
+            {loading ? (
+              <div className="w-5 h-5 rounded-full border-2 animate-spin border-b-transparent pointer-events-none"></div>
+            ) : (
+              <div className="flex items-center gap-x-1">
+                SIGN IN
+                <FaArrowRight />
+              </div>
+            )}
           </button>
         </form>
       </div>

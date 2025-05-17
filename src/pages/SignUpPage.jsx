@@ -2,9 +2,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { FaArrowRight } from "react-icons/fa";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router";
 import { toast } from "react-toastify";
+
 import * as yup from "yup";
 import api from "../common/api";
 const schema = yup.object({
@@ -27,15 +29,17 @@ function SignUpPage() {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm({ resolver: yupResolver(schema) });
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const handleSubmitFormSignUp = async (value) => {
     if (isValid) {
       try {
+        setLoading(true);
         const response = await axios({
           method: api.signUp.method,
           url: api.signUp.url,
@@ -46,6 +50,7 @@ function SignUpPage() {
           },
         });
         if (response.data.status === "success") {
+          setLoading(false);
           toast.success("Đăng ký thành công", {
             pauseOnHover: false,
             autoClose: 1300,
@@ -57,6 +62,7 @@ function SignUpPage() {
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
         toast.error("Tài khoản đã tồn tại !", {
           pauseOnHover: false,
           autoClose: 1500,
@@ -67,7 +73,7 @@ function SignUpPage() {
     }
   };
   return (
-    <div className="flex justify-center py-10 h-screen items-center w-full">
+    <div className="flex justify-center h-screen items-center w-full">
       <div className="w-full max-w-[400px] shadow-lg rounded bg-white">
         <div>
           <NavLink
@@ -178,14 +184,17 @@ function SignUpPage() {
             )}
           </div>
           <button
-            // disabled={isSubmitting}
+            disabled={isSubmitting}
             className={`text-white font-semibold uppercase flex items-center justify-center p-2 min-h-10 bg-[#fa8232] hover:cursor-pointer`}
           >
-            SIGN UP
-            {/* {loading ? <div className="w-5 h-5 rounded-full border-2 animate-spin border-b-transparent pointer-events-none"></div> : <div className="flex items-center gap-x-1">
-              SIGN UP
-              <FaArrowRight />
-            </div>} */}
+            {loading ? (
+              <div className="w-5 h-5 rounded-full border-2 animate-spin border-b-transparent pointer-events-none"></div>
+            ) : (
+              <div className="flex items-center gap-x-1">
+                SIGN UP
+                <FaArrowRight />
+              </div>
+            )}
           </button>
         </form>
       </div>

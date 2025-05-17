@@ -11,11 +11,11 @@ function App() {
     location.pathname.includes("detail");
   return (
     <>
-      <Header></Header>
-      <div className="flex items-start">
+      {!hideHeaderAndSidebar && <Header></Header>}
+      <main className="flex items-start min-h-screen">
         {!hideHeaderAndSidebar && <SideBar></SideBar>}
         <Outlet></Outlet>
-      </div>
+      </main>
       <ToastContainer></ToastContainer>
     </>
   );

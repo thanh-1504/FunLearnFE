@@ -1,7 +1,8 @@
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 function Header() {
+  const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user"))?.id;
   return (
     <header className="shadow-md min-h-16 fixed w-full flex items-center px-5 z-50 bg-[#f6f6f8]">
@@ -13,17 +14,24 @@ function Header() {
           Fun Learn
         </span>
       </Link>
-      {!user ? (
-        <button className="flex items-center gap-x-2 bg-[#978df8] text-white rounded-md p-2 ml-auto px-5 font-medium hover:cursor-pointer">
-          <FaRegCircleUser />
-          <Link to={"/signup"}>Đăng ký</Link>
-        </button>
-      ) : (
-        <img
-          src="/images/userImage.png"
-          alt="user profile"
-          className="max-w-10 max-h-10 ml-auto hover:cursor-pointer"
-        />
+      {location.pathname !== "/signup" && location.pathname !== "/signin" && (
+        <div className="ml-auto">
+          {!user ? (
+            <Link
+              to={"/signup"}
+              className="flex items-center gap-x-2 bg-[#978df8] text-white rounded-md p-2 px-5 font-medium hover:cursor-pointer"
+            >
+              <FaRegCircleUser />
+              <span>Đăng ký</span>
+            </Link>
+          ) : (
+            <img
+              src="/images/userImage.png"
+              alt="user profile"
+              className="max-w-10 max-h-10 ml-auto hover:cursor-pointer"
+            />
+          )}
+        </div>
       )}
     </header>
   );

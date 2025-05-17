@@ -3,7 +3,7 @@ import sidebarItem from "../common/sidebarItem";
 
 function SideBar() {
   const user = JSON.parse(localStorage.getItem("user"))?.id;
-  if (!user) sidebarItem.pop();
+  if (!user) sidebarItem[2] = null;
   return (
     <aside
       id="sidebar"
@@ -14,11 +14,11 @@ function SideBar() {
           return (
             <Link
               key={index}
-              to={item.path}
+              to={item?.path}
               className="flex items-center gap-x-2 hover:text-[#978df9] hover:cursor-pointer transition-all hover:bg-[#f4f3fe] p-2 rounded my-3"
             >
-              {item.icon}
-              <span className="mb-0.5">{item.title}</span>
+              {item?.icon}
+              <span className="mb-0.5">{item?.title}</span>
             </Link>
           );
         })}
