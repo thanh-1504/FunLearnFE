@@ -85,7 +85,7 @@ function SignUpPage() {
           <NavLink
             className={({ isActive }) =>
               isActive
-                ? "w-2/4 bg-white inline-block text-center p-2 border-b-2 border-b-[#fa8232] font-semibold"
+                ? "w-2/4 bg-white inline-block text-center p-2 border-b-2 border-b-[#978df8] font-semibold"
                 : "w-2/4 bg-white inline-block text-center p-2"
             }
           >
@@ -185,7 +185,7 @@ function SignUpPage() {
           </div>
           <button
             disabled={isSubmitting}
-            className={`text-white font-semibold uppercase flex items-center justify-center p-2 min-h-10 bg-[#fa8232] hover:cursor-pointer`}
+            className={`text-white font-semibold uppercase flex items-center justify-center p-2 min-h-10 bg-[#978df8] hover:cursor-pointer`}
           >
             {loading ? (
               <div className="w-5 h-5 rounded-full border-2 animate-spin border-b-transparent pointer-events-none"></div>

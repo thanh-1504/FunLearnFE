@@ -5,7 +5,7 @@ function Header() {
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user"))?.id;
   return (
-    <header className="shadow-md min-h-16 fixed w-full flex items-center px-5 z-50 bg-[#f6f6f8]">
+    <header className="shadow-md h-16 fixed w-full flex items-center px-5 z-50 bg-[#f6f6f8] top-0 left-0">
       <Link to={"/"} className="flex items-center">
         <span className="min-w-8 min-h-8 rounded-full bg-[#978df8] font-bold text-white flex items-center justify-center mr-2 text-xl hover:cursor-pointer">
           F

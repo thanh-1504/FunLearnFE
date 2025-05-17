@@ -6,9 +6,7 @@ import SideBar from "./components/SideBar";
 function App() {
   const location = useLocation();
   const hideHeaderAndSidebar =
-    location.pathname === "/signup" ||
-    location.pathname === "/signin" ||
-    location.pathname.includes("detail");
+    location.pathname === "/signup" || location.pathname === "/signin";
   return (
     <>
       {!hideHeaderAndSidebar && <Header></Header>}

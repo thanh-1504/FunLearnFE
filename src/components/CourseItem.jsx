@@ -29,11 +29,14 @@ function CourseItem({ data }) {
   );
 
   return isComing ? (
-    <div className="bg-white p-3 cursor-not-allowed opacity-70">
+    <div className="bg-white p-3 cursor-not-allowed opacity-70 ">
       {courseContent}
     </div>
   ) : (
-    <Link to={!user ? "/signin" : `/detail/${_id}`} className="bg-white p-3">
+    <Link
+      to={!user ? "/signin" : `/detail/${_id}`}
+      className="bg-white p-3 hover:shadow-2xl transition-all duration-300"
+    >
       {courseContent}
     </Link>
   );

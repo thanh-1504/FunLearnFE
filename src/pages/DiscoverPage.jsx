@@ -24,7 +24,7 @@ function DiscoverPage() {
     fetchCourse();
   }, []);
   return (
-    <div className="pt-24 px-10 w-full bg-[#f6f6f8]">
+    <div className="pt-24 px-10 w-full bg-[#f6f6f8] max-h-screen overflow-y-auto">
       <LabelOfPage>Khám phá</LabelOfPage>
       <div className="my-5 flex items-center justify-between bg-white p-4 rounded">
         <input
