@@ -25,7 +25,6 @@ function ProfilePage() {
     handleSubmit,
     formState: { isValid, errors },
   } = useForm({ resolver: yupResolver(schema) });
-
   const handleSubmitFormUpdateUser = async (value) => {
     if (user?.signInWithGoogle) {
       Swal.fire({
