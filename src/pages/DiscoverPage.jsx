@@ -13,7 +13,7 @@ function DiscoverPage() {
 
   const handleFilterCourseByName = async (e) => {
     if (e.key === "Enter") {
-      navigate(`?filter=${e.target.value}`);
+      navigate(`${e.target.value ? `?filter=${e.target.value}` : ""}`);
       try {
         const response = await axios({
           method: api.getCourses.method,
