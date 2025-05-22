@@ -5,11 +5,11 @@ function SideBar() {
   const location = useLocation();
   const hideSidebar = location.pathname.includes("detail");
   const user = JSON.parse(localStorage.getItem("user"))?.id;
-  if (!user) sidebarItem[2] = null;
+  if (!user && sidebarItem.length >= 3) sidebarItem.pop();
   return (
     <aside
       id="sidebar"
-      className={`pt-20 border-r-2 border-r-slate-200 min-h-screen px-4 w-[25%] ${
+      className={`pt-20 border-r-2 border-r-slate-200 min-h-screen px-4 ${
         hideSidebar && "hidden"
       }`}
     >

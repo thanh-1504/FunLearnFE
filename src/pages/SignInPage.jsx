@@ -3,11 +3,13 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaArrowRight } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import api from "../common/api";
+import handleAuthenticationWithGoogle from "../utils/authenticationWithGoogle";
 
 const schema = yup.object({
   email: yup.string().email().required("Email is required"),
@@ -153,6 +155,35 @@ function SignInPage() {
                 <FaArrowRight />
               </div>
             )}
+          </button>
+          <div className="relative flex my-4 justify-center items-center">
+            <div className="flex-grow border-t border-slate-300"></div>
+            <span className="absolute bg-white px-2 text-gray-500">or</span>
+          </div>
+          <button
+            type="button"
+            className="flex items-center justify-center p-2 border-slate-300 border gap-x-2 hover:cursor-pointer"
+            onClick={async () => {
+              try {
+                const userData = await handleAuthenticationWithGoogle(navigate);
+                const { displayName, email } = userData;
+                await axios({
+                  method: api.signIn.method,
+                  url: api.signIn.url,
+                  data: {
+                    name: displayName,
+                    email,
+                    signInWithGoogle: true,
+                  },
+                });
+              } catch (error) {
+                console.log(error);
+                toast.error("Đăng nhập Google thất bại");
+                return;
+              }
+            }}
+          >
+            Đăng nhập với Google <FcGoogle className="w-5 h-5" />
           </button>
         </form>
       </div>

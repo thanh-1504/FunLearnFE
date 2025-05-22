@@ -10,7 +10,15 @@ function App() {
   return (
     <>
       {!hideHeaderAndSidebar && <Header></Header>}
-      <main className="flex items-start min-h-screen">
+      <main
+        className={`grid ${
+          location.pathname === "/signup" ||
+          location.pathname === "/signin" ||
+          location.pathname.includes("detail")
+            ? "grid-cols-1"
+            : "grid-cols-[20%_80%]"
+        } `}
+      >
         {!hideHeaderAndSidebar && <SideBar></SideBar>}
         <Outlet></Outlet>
       </main>

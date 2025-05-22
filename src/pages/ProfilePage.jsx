@@ -1,3 +1,4 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -5,8 +6,16 @@ import { GoSignOut } from "react-icons/go";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import * as yup from "yup";
 import api from "../common/api";
 
+const schema = yup.object({
+  password: yup
+    .string()
+    .required("Điền mật khẩu mới để cập nhật")
+    .min(6, "Mật khẩu phải có ít nhất 6 kí tự"),
+});
 function ProfilePage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -14,43 +23,52 @@ function ProfilePage() {
   const {
     register,
     handleSubmit,
-    formState: { isValid },
-  } = useForm();
+    formState: { isValid, errors },
+  } = useForm({ resolver: yupResolver(schema) });
 
   const handleSubmitFormUpdateUser = async (value) => {
-    if (isValid) {
-      try {
-        const response = await axios({
-          method: api.getProfile.method,
-          url: `${api.getProfile.url}/${user?.id}`,
-          data: {
-            name: value?.name,
-            email: value?.email,
-            password: value?.password,
-          },
-        });
-        if (response.data.status === "success") {
-          toast.success("Cập nhật thành công", {
-            pauseOnHover: false,
-            autoClose: 1300,
+    if (user?.signInWithGoogle) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Chức năng cập nhật đang được bảo trì",
+      });
+      return;
+    } else {
+      if (isValid) {
+        try {
+          const response = await axios({
+            method: api.getProfile.method,
+            url: `${api.getProfile.url}/${user?.id}`,
+            data: {
+              name: value?.name,
+              email: value?.email,
+              password: value?.password,
+            },
           });
-          localStorage.setItem(
-            "user",
-            JSON.stringify({
-              id: response.data.userUpdated?._id,
-              name: response.data.userUpdated?.name,
-              email: response.data.userUpdated?.email,
-              role: response.data.userUpdated?.role,
-            })
-          );
+          if (response.data.status === "success") {
+            toast.success("Cập nhật thành công", {
+              pauseOnHover: false,
+              autoClose: 1300,
+            });
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                id: response.data.userUpdated?._id,
+                name: response.data.userUpdated?.name,
+                email: response.data.userUpdated?.email,
+                role: response.data.userUpdated?.role,
+              })
+            );
+          }
+        } catch (error) {
+          console.log(error);
+          toast.error("Cập nhật thất bại !", {
+            pauseOnHover: false,
+            autoClose: 1500,
+          });
+          return;
         }
-      } catch (error) {
-        console.log(error);
-        toast.error("Cập nhật thất bại !", {
-          pauseOnHover: false,
-          autoClose: 1500,
-        });
-        return;
       }
     }
   };
@@ -128,6 +146,9 @@ function ProfilePage() {
               />
             )}
           </div>
+          {errors.password?.message && (
+            <p className="text-red-500">{errors.password.message}</p>
+          )}
         </div>
       </form>
     </div>
